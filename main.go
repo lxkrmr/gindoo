@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/lxkrmr/gindoo/cmd"
+	"github.com/lxkrmr/gindoo/internal/cmd"
 )
 
 const help = `gindoo — read-only CLI for inspecting Odoo data

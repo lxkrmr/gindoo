@@ -10,3 +10,4 @@ This directory stores long-lived product and architecture decisions for
 - [0003: Connection via flags](0003-connection-via-flags.md)
 - [0004: Command names follow Odoo conventions](0004-odoo-command-names.md)
 - [0005: Help-driven discovery](0005-help-driven-discovery.md)
+- [0006: internal/cmd instead of cmd](0006-internal-cmd-package.md)
