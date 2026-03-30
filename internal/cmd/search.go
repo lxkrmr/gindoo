@@ -25,8 +25,8 @@ Flags:
 Examples:
   gindoo search res.partner
   gindoo search res.partner name email
-  gindoo search res.partner name email --domain "[('is_company', '=', True)]"
-  gindoo search res.partner name --limit 5 --offset 10`
+  gindoo search --domain "[('is_company', '=', True)]" res.partner name email
+  gindoo search --limit 5 --offset 10 res.partner name`
 
 // searchInput holds the parsed data for a search command.
 type searchInput struct {
