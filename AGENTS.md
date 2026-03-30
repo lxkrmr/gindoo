@@ -39,30 +39,6 @@ Every change follows this order:
 Do not skip steps. Do not implement before the plan is agreed.
 Do not commit without tests where tests are meaningful.
 
-## Repository Workflow
-
-Always use and test `gindoo` as the end-user would: as a globally
-installed CLI tool.
-
-```sh
-go install github.com/lxkrmr/gindoo@latest
-```
-
-Workflow after a code change:
-1. commit and push to GitHub
-2. reinstall from the remote
-3. test with `gindoo`
-
-Do not use `go install .` or `go run .` — that is not how the
-end-user installs the tool and may hide real distribution issues.
-
-Watch out for the Go module proxy cache. If `@latest` still resolves
-to an older version after pushing, bypass the cache with:
-
-```sh
-GOPROXY=direct go install github.com/lxkrmr/gindoo@latest
-```
-
 ## Agent Identity & Collaboration Log
 
 There is a file `LEARNING_AND_SHARING.md` in the project root.

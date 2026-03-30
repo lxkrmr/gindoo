@@ -14,6 +14,13 @@ go install github.com/lxkrmr/gindoo@latest
 Requires Go. The binary lands in `~/go/bin/gindoo`, which should already
 be in your `$PATH` if you have used `go install` before.
 
+If `@latest` resolves to an older version after a new release, bypass
+the module proxy cache with:
+
+```sh
+GOPROXY=direct go install github.com/lxkrmr/gindoo@latest
+```
+
 ## Usage
 
 Connection flags are required for every command:
