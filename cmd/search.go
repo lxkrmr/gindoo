@@ -11,19 +11,13 @@ import (
 const searchHelp = `Search and read records for an Odoo model.
 
 Usage:
-  gindoo search [flags] <model> [fields...]
+  gindoo [connection flags] search <model> [fields...] [flags]
 
 Arguments:
   model     Technical model name (e.g. res.partner)
   fields    Fields to include in the result (default: id only)
 
-Connection flags:
-  --url       Odoo base URL (e.g. http://localhost:8069)
-  --db        Database name
-  --user      Login user
-  --password  Login password
-
-Command flags:
+Flags:
   --domain    Odoo domain filter (e.g. "[('is_company', '=', True)]")
   --limit     Maximum number of records to return (default: 10)
   --offset    Number of records to skip (default: 0)
@@ -36,7 +30,6 @@ Examples:
 
 // searchInput holds the parsed data for a search command.
 type searchInput struct {
-	conn   connFlags
 	model  string
 	fields []string
 	domain string
@@ -51,7 +44,6 @@ func parseSearchArgs(args []string) (searchInput, error) {
 	fs.Usage = func() { fmt.Println(searchHelp) }
 
 	var input searchInput
-	registerConnFlags(fs, &input.conn)
 	fs.StringVar(&input.domain, "domain", "", "Odoo domain filter")
 	fs.IntVar(&input.limit, "limit", 10, "Maximum number of records")
 	fs.IntVar(&input.offset, "offset", 0, "Number of records to skip")
@@ -87,7 +79,7 @@ func buildSearchResult(input searchInput, records any) map[string]any {
 }
 
 // RunSearch orchestrates side effects: parse, connect, execute, write.
-func RunSearch(args []string) {
+func RunSearch(args []string, conn ConnFlags) {
 	input, err := parseSearchArgs(args)
 	if err == flag.ErrHelp {
 		os.Exit(0)
@@ -106,7 +98,7 @@ func RunSearch(args []string) {
 		}
 	}
 
-	client, err := input.conn.connect()
+	client, err := conn.Connect()
 	if err != nil {
 		write(errorPayload("search", fmt.Errorf("cannot connect to Odoo: %w", err)))
 		os.Exit(1)

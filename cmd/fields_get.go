@@ -11,17 +11,11 @@ import (
 const fieldsGetHelp = `Describe fields and their metadata for an Odoo model.
 
 Usage:
-  gindoo fields_get [flags] <model> [fields...]
+  gindoo [connection flags] fields_get <model> [fields...]
 
 Arguments:
   model     Technical model name (e.g. res.partner)
   fields    Specific field names to inspect (default: all fields)
-
-Connection flags:
-  --url       Odoo base URL (e.g. http://localhost:8069)
-  --db        Database name
-  --user      Login user
-  --password  Login password
 
 Examples:
   gindoo fields_get res.partner
@@ -30,7 +24,6 @@ Examples:
 
 // fieldsGetInput holds the parsed data for a fields_get command.
 type fieldsGetInput struct {
-	conn   connFlags
 	model  string
 	fields []string
 }
@@ -41,9 +34,6 @@ func parseFieldsGetArgs(args []string) (fieldsGetInput, error) {
 	fs.SetOutput(os.Stdout)
 	fs.Usage = func() { fmt.Println(fieldsGetHelp) }
 
-	var input fieldsGetInput
-	registerConnFlags(fs, &input.conn)
-
 	if err := fs.Parse(args); err != nil {
 		return fieldsGetInput{}, err
 	}
@@ -53,10 +43,10 @@ func parseFieldsGetArgs(args []string) (fieldsGetInput, error) {
 		return fieldsGetInput{}, fmt.Errorf("model name is required — run 'gindoo fields_get --help'")
 	}
 
-	input.model = positional[0]
-	input.fields = positional[1:]
-
-	return input, nil
+	return fieldsGetInput{
+		model:  positional[0],
+		fields: positional[1:],
+	}, nil
 }
 
 // fieldArgs builds the first argument for fields_get — pure calculation.
@@ -77,7 +67,7 @@ func buildFieldsGetResult(input fieldsGetInput, fields any) map[string]any {
 }
 
 // RunFieldsGet orchestrates side effects: parse, connect, execute, write.
-func RunFieldsGet(args []string) {
+func RunFieldsGet(args []string, conn ConnFlags) {
 	input, err := parseFieldsGetArgs(args)
 	if err == flag.ErrHelp {
 		os.Exit(0)
@@ -87,7 +77,7 @@ func RunFieldsGet(args []string) {
 		os.Exit(1)
 	}
 
-	client, err := input.conn.connect()
+	client, err := conn.Connect()
 	if err != nil {
 		write(errorPayload("fields_get", fmt.Errorf("cannot connect to Odoo: %w", err)))
 		os.Exit(1)

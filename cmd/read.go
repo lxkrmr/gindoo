@@ -12,18 +12,12 @@ import (
 const readHelp = `Read fields from a single Odoo record by ID.
 
 Usage:
-  gindoo read [flags] <model> <id> <fields...>
+  gindoo [connection flags] read <model> <id> <fields...>
 
 Arguments:
   model     Technical model name (e.g. res.partner)
   id        Record ID
   fields    One or more field names to read
-
-Connection flags:
-  --url       Odoo base URL (e.g. http://localhost:8069)
-  --db        Database name
-  --user      Login user
-  --password  Login password
 
 Examples:
   gindoo read res.partner 1 name email phone
@@ -31,7 +25,6 @@ Examples:
 
 // readInput holds the parsed data for a read command.
 type readInput struct {
-	conn   connFlags
 	model  string
 	id     int
 	fields []string
@@ -43,9 +36,6 @@ func parseReadArgs(args []string) (readInput, error) {
 	fs.SetOutput(os.Stdout)
 	fs.Usage = func() { fmt.Println(readHelp) }
 
-	var input readInput
-	registerConnFlags(fs, &input.conn)
-
 	if err := fs.Parse(args); err != nil {
 		return readInput{}, err
 	}
@@ -55,16 +45,16 @@ func parseReadArgs(args []string) (readInput, error) {
 		return readInput{}, fmt.Errorf("model, id, and at least one field are required — run 'gindoo read --help'")
 	}
 
-	input.model = positional[0]
-
 	id, err := strconv.Atoi(positional[1])
 	if err != nil {
 		return readInput{}, fmt.Errorf("id must be an integer, got %q", positional[1])
 	}
-	input.id = id
-	input.fields = positional[2:]
 
-	return input, nil
+	return readInput{
+		model:  positional[0],
+		id:     id,
+		fields: positional[2:],
+	}, nil
 }
 
 // buildReadResult shapes the data for the JSON response — pure calculation.
@@ -78,7 +68,7 @@ func buildReadResult(input readInput, record any) map[string]any {
 }
 
 // RunRead orchestrates side effects: parse, connect, execute, write.
-func RunRead(args []string) {
+func RunRead(args []string, conn ConnFlags) {
 	input, err := parseReadArgs(args)
 	if err == flag.ErrHelp {
 		os.Exit(0)
@@ -88,7 +78,7 @@ func RunRead(args []string) {
 		os.Exit(1)
 	}
 
-	client, err := input.conn.connect()
+	client, err := conn.Connect()
 	if err != nil {
 		write(errorPayload("read", fmt.Errorf("cannot connect to Odoo: %w", err)))
 		os.Exit(1)
