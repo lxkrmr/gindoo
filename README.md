@@ -2,13 +2,19 @@
 
 A read-only CLI for inspecting Odoo data.
 
-`gindoo` is designed for two kinds of users working together: a developer
-who knows what they want to find out, and a coding assistant who uses
-gindoo to explore the Odoo instance and surface the answer.
+## What it is
 
-It gives both a safe window into a local Odoo instance — more detail
-than the UI, more context than the database, no risk of accidental
-mutation.
+`gindoo` is a tool for exploring a local Odoo instance together with a
+coding assistant. The typical workflow:
+
+1. You tell your coding assistant: _"have a look at gindoo"_
+2. The assistant reads `gindoo --help` and understands the tool
+3. You provide the connection details: URL, database, user, password
+4. You and the assistant explore Odoo together — the assistant runs
+   `gindoo` commands, you ask questions
+
+`gindoo` is read-only by design. It is safe to run against any Odoo
+instance without risk of accidental data mutation.
 
 ## Install
 
@@ -26,41 +32,13 @@ the module proxy cache with:
 GOPROXY=direct go install github.com/lxkrmr/gindoo@latest
 ```
 
-## Quickstart
-
-1. Add an alias to your `~/.zshrc` or `~/.bashrc`:
-
-```sh
-alias gindoo='gindoo --url http://localhost:8069 --db mydb --user admin --password secret'
-```
-
-2. Reload your shell:
-
-```sh
-source ~/.zshrc  # or ~/.bashrc
-```
-
-3. Start inspecting:
-
-```sh
-gindoo search res.partner name email
-gindoo search_count product.product
-gindoo fields_get sale.order
-```
-
 ## Usage
 
 Connection flags are required for every command and must come before
 the command name:
 
 ```sh
-gindoo --url http://localhost:8069 --db mydb --user admin --password secret <command>
-```
-
-With the alias from the quickstart, this becomes simply:
-
-```sh
-gindoo <command>
+gindoo --url <url> --db <db> --user <user> --password <password> <command> [args]
 ```
 
 ### Commands
@@ -83,6 +61,8 @@ gindoo fields_get res.partner name email
 ```
 
 All output is JSON.
+
+Run `gindoo <command> --help` for command-specific usage and examples.
 
 ## License
 
