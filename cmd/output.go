@@ -24,6 +24,11 @@ func errorPayload(command string, err error) map[string]any {
 	}
 }
 
+// WriteError writes an error payload to stdout — exported for use in main.
+func WriteError(command string, err error) {
+	write(errorPayload(command, err))
+}
+
 // write is the single side effect: marshal and print to stdout.
 func write(v any) {
 	b, err := json.Marshal(v)

@@ -66,11 +66,7 @@ func main() {
 	case "help":
 		fmt.Println(help)
 	default:
-		fmt.Fprintf(os.Stdout,
-			`{"ok":false,"command":"","error":"unknown command %q — run gindoo --help"}`,
-			remaining[0],
-		)
-		fmt.Println()
+		cmd.WriteError("", fmt.Errorf("unknown command %q — run gindoo --help", remaining[0]))
 		os.Exit(1)
 	}
 }
