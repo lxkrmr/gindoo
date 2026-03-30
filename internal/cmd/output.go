@@ -31,7 +31,7 @@ func WriteError(command string, err error) {
 
 // write is the single side effect: marshal and print to stdout.
 func write(v any) {
-	b, err := json.Marshal(v)
+	b, err := json.MarshalIndent(v, "", "  ")
 	if err != nil {
 		fmt.Fprintf(os.Stderr, `{"ok":false,"command":"","error":"failed to marshal output: %s"}`, err)
 		os.Exit(1)

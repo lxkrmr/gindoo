@@ -2,8 +2,13 @@
 
 A read-only CLI for inspecting Odoo data.
 
-`gindoo` gives developers a safe window into a local Odoo instance —
-more detail than the UI, more context than the database.
+`gindoo` is designed for two kinds of users working together: a developer
+who knows what they want to find out, and a coding assistant who uses
+gindoo to explore the Odoo instance and surface the answer.
+
+It gives both a safe window into a local Odoo instance — more detail
+than the UI, more context than the database, no risk of accidental
+mutation.
 
 ## Install
 
