@@ -39,6 +39,26 @@ Every change follows this order:
 Do not skip steps. Do not implement before the plan is agreed.
 Do not commit without tests where tests are meaningful.
 
+## Repository Workflow
+
+Always use and test `gindoo` as the end-user would: as a globally
+installed CLI tool.
+
+```sh
+go install github.com/lxkrmr/gindoo@latest
+```
+
+During local development, install from the working directory:
+
+```sh
+cd /Users/me/workspace/gindoo && go install .
+```
+
+After every code change, reinstall before testing. The globally installed
+binary does not pick up source changes automatically.
+
+Do not test by running `go run .` — that is not how the end-user runs it.
+
 ## Agent Identity & Collaboration Log
 
 There is a file `LEARNING_AND_SHARING.md` in the project root.
