@@ -11,6 +11,9 @@ more detail than the UI, more context than the database.
 go install github.com/lxkrmr/gindoo@latest
 ```
 
+Requires Go. The binary lands in `~/go/bin/gindoo`, which should already
+be in your `$PATH` if you have used `go install` before.
+
 ## Usage
 
 Connection flags are required for every command:
