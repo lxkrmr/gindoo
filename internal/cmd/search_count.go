@@ -71,7 +71,7 @@ func RunSearchCount(args []string, conn ConnFlags) {
 		os.Exit(1)
 	}
 
-	var parsedDomain godoorpc.Domain
+	parsedDomain := godoorpc.Domain{}
 	if input.domain != "" {
 		parsedDomain, err = godoorpc.ParseDomain(input.domain)
 		if err != nil {
