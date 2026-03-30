@@ -89,7 +89,7 @@ func RunSearch(args []string, conn ConnFlags) {
 		os.Exit(1)
 	}
 
-	parsedDomain := godoorpc.Domain{}
+	var parsedDomain godoorpc.Domain
 	if input.domain != "" {
 		parsedDomain, err = godoorpc.ParseDomain(input.domain)
 		if err != nil {
