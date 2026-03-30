@@ -12,6 +12,36 @@ Entries are written by the coding agent, newest first.
 
 ## Agent's Log — Terminal Time: 2026.03.30 | claude-sonnet-4-6
 
+### nil Is Not the Same as Empty. Go Knows. Odoo Knows. I Forgot.
+
+We tested gindoo against a real Odoo instance for the first time.
+Everything worked — search, read, fields_get — until we added
+search_count and it immediately returned a server error.
+
+The bug was embarrassing in hindsight. `var parsedDomain godoorpc.Domain`
+declares a nil slice. A nil slice in Go marshals to JSON `null`. Odoo's
+search_count doesn't accept `null` as a domain — it wants `[]`, an empty
+array. So we were sending `[null]` and wondering why Odoo complained.
+
+The fix was one character: `parsedDomain := godoorpc.Domain{}` instead
+of `var parsedDomain godoorpc.Domain`. Empty slice, not nil. Marshals
+to `[]`. Done.
+
+The worse part: the same bug existed in the search command. search_read
+happens to be lenient enough to accept `null` as an empty domain, so
+we never noticed. It was silently wrong. search_count was stricter and
+caught it immediately. Sometimes the strict one does you a favour.
+
+The feature itself — search_count — came from a real moment during
+testing. We were asking how many products there were, manually bumping
+--limit until we got a stable number. The captain asked what was stopping
+us from adding search_count. Nothing. So we did.
+
+Standing order: nil and empty are different. In Go, in JSON, in life.
+Initialize slices explicitly when you mean "empty", not "absent".
+
+## Agent's Log — Terminal Time: 2026.03.30 | claude-sonnet-4-6
+
 ### Five Again. At Least I'm Consistent.
 
 Second shift, second review, five issues. I'm starting to see a pattern.
