@@ -14,9 +14,10 @@ Usage:
   gindoo --url <url> --db <db> --user <user> --password <password> <command> [args]
 
 Commands:
-  search      Search and read records for a model
-  read        Read fields from a single record by ID
-  fields_get  Describe fields and their metadata for a model
+  search        Search and read records for a model
+  search_count  Count records matching a domain
+  read          Read fields from a single record by ID
+  fields_get    Describe fields and their metadata for a model
 
 Connection flags (required, must come before the command):
   --url       Odoo base URL (e.g. http://localhost:8069)
@@ -59,6 +60,8 @@ func main() {
 	switch remaining[0] {
 	case "search":
 		cmd.RunSearch(remaining[1:], conn)
+	case "search_count":
+		cmd.RunSearchCount(remaining[1:], conn)
 	case "read":
 		cmd.RunRead(remaining[1:], conn)
 	case "fields_get":

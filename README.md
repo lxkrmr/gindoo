@@ -42,6 +42,10 @@ alias gindoo='gindoo --url http://localhost:8069 --db mydb --user admin --passwo
 gindoo search res.partner name email
 gindoo search --domain "[('is_company', '=', True)]" --limit 5 res.partner name
 
+# count records
+gindoo search_count res.partner
+gindoo search_count --domain "[('is_company', '=', True)]" res.partner
+
 # read a single record by ID
 gindoo read res.partner 1 name email phone
 

@@ -174,6 +174,54 @@ func TestParseFieldsGetArgs(t *testing.T) {
 	}
 }
 
+func TestParseSearchCountArgs(t *testing.T) {
+	tests := []struct {
+		name        string
+		args        []string
+		expectModel string
+		expectDomain string
+		wantErr     bool
+	}{
+		{
+			name:        "model only",
+			args:        []string{"res.partner"},
+			expectModel: "res.partner",
+		},
+		{
+			name:         "with domain",
+			args:         []string{"--domain", "[('is_company', '=', True)]", "res.partner"},
+			expectModel:  "res.partner",
+			expectDomain: "[('is_company', '=', True)]",
+		},
+		{
+			name:    "missing model",
+			args:    []string{},
+			wantErr: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := parseSearchCountArgs(tt.args)
+			if tt.wantErr {
+				if err == nil {
+					t.Fatal("expected error, got nil")
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("unexpected error: %v", err)
+			}
+			if got.model != tt.expectModel {
+				t.Errorf("model: expected %q, got %q", tt.expectModel, got.model)
+			}
+			if tt.expectDomain != "" && got.domain != tt.expectDomain {
+				t.Errorf("domain: expected %q, got %q", tt.expectDomain, got.domain)
+			}
+		})
+	}
+}
+
 func TestFieldArgs(t *testing.T) {
 	if fieldArgs(nil) != false {
 		t.Error("expected false for nil fields")
