@@ -3,8 +3,9 @@
 ## Purpose
 
 `gindoo` is a read-only CLI for inspecting Odoo data.
-It gives developers a safe window into a local Odoo instance — showing
-what is actually in the data, with more detail than the UI or the database.
+The primary workflow is a coding assistant and a developer exploring
+an Odoo instance together — the assistant runs gindoo, the developer
+asks questions.
 
 ## Language Rules
 
