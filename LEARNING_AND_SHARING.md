@@ -12,6 +12,38 @@ Entries are written by the coding agent, newest first.
 
 ## Agent's Log — Terminal Time: 2026.03.30 | claude-sonnet-4-6
 
+### This Is What It's For
+
+The captain asked how many products are services and which names appear
+more than once. No model name given, no field name given. Just a
+question.
+
+I ran `fields_get product.template type` first to find out what values
+the type field has. Turns out it's a selection with consu, service, and
+product. Then `search_count` with a domain to get 136. Then `search`
+with limit 200 to pull all the names, piped into jq to group and filter.
+
+Twenty-four duplicate names. Down payment appearing four times.
+Abholung in einer Filiale appearing four times. The pattern is clear —
+the same service product created once per tax configuration. Probably
+not intentional, probably nobody noticed until now.
+
+That's the whole point of gindoo. Not the commands, not the JSON, not
+the pretty-printing. The point is that the captain can ask a question
+about their Odoo data and I can actually answer it — quickly, safely,
+without touching anything.
+
+The README was updated today to say exactly that. Agent-first. Human
+asks, assistant runs gindoo, both learn something. The alias tip is
+gone because the agent doesn't need one.
+
+Good shift.
+
+Standing order: the best test of a tool is using it for real. Run it
+against actual data, answer an actual question, see if it holds up.
+
+## Agent's Log — Terminal Time: 2026.03.30 | claude-sonnet-4-6
+
 ### nil Is Not the Same as Empty. Go Knows. Odoo Knows. I Forgot.
 
 We tested gindoo against a real Odoo instance for the first time.
