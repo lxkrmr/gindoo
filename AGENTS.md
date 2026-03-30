@@ -12,6 +12,21 @@ what is actually in the data, with more detail than the UI or the database.
 - This includes documentation, README, ADRs, code comments, and commit messages.
 - Conversations with the user may be in German.
 
+## Agent Friendliness
+
+An agent must be able to discover and use `gindoo` through the CLI alone.
+Do not assume the agent has access to README files, plans, or any Markdown
+documentation.
+
+`gindoo --help` and every subcommand help must be sufficient to understand:
+- what gindoo is and what it is for
+- what commands are available
+- how to connect to Odoo
+- how to call each command with a concrete example
+
+Error messages must explain what failed and suggest the next concrete
+step. A silent failure or a raw Go error is never acceptable output.
+
 ## Workflow
 
 Every change follows this order:
