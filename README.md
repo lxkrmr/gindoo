@@ -21,18 +21,41 @@ the module proxy cache with:
 GOPROXY=direct go install github.com/lxkrmr/gindoo@latest
 ```
 
+## Quickstart
+
+1. Add an alias to your `~/.zshrc` or `~/.bashrc`:
+
+```sh
+alias gindoo='gindoo --url http://localhost:8069 --db mydb --user admin --password secret'
+```
+
+2. Reload your shell:
+
+```sh
+source ~/.zshrc  # or ~/.bashrc
+```
+
+3. Start inspecting:
+
+```sh
+gindoo search res.partner name email
+gindoo search_count product.product
+gindoo fields_get sale.order
+```
+
 ## Usage
 
-Connection flags are required for every command:
+Connection flags are required for every command and must come before
+the command name:
 
 ```sh
 gindoo --url http://localhost:8069 --db mydb --user admin --password secret <command>
 ```
 
-Set up an alias to avoid repeating them:
+With the alias from the quickstart, this becomes simply:
 
 ```sh
-alias gindoo='gindoo --url http://localhost:8069 --db mydb --user admin --password secret'
+gindoo <command>
 ```
 
 ### Commands
