@@ -48,16 +48,20 @@ installed CLI tool.
 go install github.com/lxkrmr/gindoo@latest
 ```
 
-During local development, install from the working directory:
+Workflow after a code change:
+1. commit and push to GitHub
+2. reinstall from the remote
+3. test with `gindoo`
+
+Do not use `go install .` or `go run .` — that is not how the
+end-user installs the tool and may hide real distribution issues.
+
+Watch out for the Go module proxy cache. If `@latest` still resolves
+to an older version after pushing, bypass the cache with:
 
 ```sh
-cd /Users/me/workspace/gindoo && go install .
+GOPROXY=direct go install github.com/lxkrmr/gindoo@latest
 ```
-
-After every code change, reinstall before testing. The globally installed
-binary does not pick up source changes automatically.
-
-Do not test by running `go run .` — that is not how the end-user runs it.
 
 ## Agent Identity & Collaboration Log
 
