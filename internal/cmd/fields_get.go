@@ -66,7 +66,7 @@ func buildFieldsGetResult(input fieldsGetInput, fields any) map[string]any {
 	}
 }
 
-// RunFieldsGet orchestrates side effects: parse, connect, execute, write.
+// RunFieldsGet executes the fields_get command: describes fields and metadata for an Odoo model.
 func RunFieldsGet(args []string, conn ConnFlags) {
 	input, err := parseFieldsGetArgs(args)
 	if err == flag.ErrHelp {

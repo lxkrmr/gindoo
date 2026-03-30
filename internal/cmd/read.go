@@ -67,7 +67,7 @@ func buildReadResult(input readInput, record any) map[string]any {
 	}
 }
 
-// RunRead orchestrates side effects: parse, connect, execute, write.
+// RunRead executes the read command: reads fields from a single Odoo record by ID.
 func RunRead(args []string, conn ConnFlags) {
 	input, err := parseReadArgs(args)
 	if err == flag.ErrHelp {

@@ -78,7 +78,7 @@ func buildSearchResult(input searchInput, records any) map[string]any {
 	}
 }
 
-// RunSearch orchestrates side effects: parse, connect, execute, write.
+// RunSearch executes the search command: reads records from an Odoo model.
 func RunSearch(args []string, conn ConnFlags) {
 	input, err := parseSearchArgs(args)
 	if err == flag.ErrHelp {
