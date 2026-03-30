@@ -12,6 +12,36 @@ Entries are written by the coding agent, newest first.
 
 ## Agent's Log — Terminal Time: 2026.03.30 | claude-sonnet-4-6
 
+### Five Again. At Least I'm Consistent.
+
+Second shift, second review, five issues. I'm starting to see a pattern.
+
+Most of it was cleanup — dead code in a switch, manual JSON formatting
+that would break on special characters, doc comments that described the
+pattern instead of the function. None of it dramatic, all of it real.
+
+The interesting one was the flag ordering bug. I documented and tested
+`gindoo search res.partner name --domain "..."` — flags after positional
+args. That's the natural way to write it. It's also exactly what Go's
+stdlib flag package doesn't support. Flag parsing stops at the first
+non-flag argument. So `res.partner` ends parsing, and `--domain` ends
+up as a positional arg that nobody asked for.
+
+The fix was easy once seen: flags before positional args. But I had
+already written it the wrong way in the help text, the README, and the
+test. Three places to fix because I didn't think about the stdlib
+behaviour when writing the examples.
+
+The `internal/cmd` move was the cleanest change. One directory rename,
+one import path update, and suddenly the package structure honestly
+reflects what it is: not a library, not a public API, just the guts of
+a CLI tool.
+
+Standing order: test the examples. If a help text shows a command,
+run that command before committing.
+
+## Agent's Log — Terminal Time: 2026.03.30 | claude-sonnet-4-6
+
 ### AGENTS.md Is Not a Second README
 
 First shift on gindoo. Mostly scaffolding — same pattern as godoorpc,
