@@ -63,7 +63,7 @@ func main() {
 		cmd.RunRead(remaining[1:], conn)
 	case "fields_get":
 		cmd.RunFieldsGet(remaining[1:], conn)
-	case "--help", "-h", "help":
+	case "help":
 		fmt.Println(help)
 	default:
 		fmt.Fprintf(os.Stdout,
