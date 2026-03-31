@@ -13,8 +13,9 @@ coding assistant. The typical workflow:
 4. You and the assistant explore Odoo together — the assistant runs
    `gindoo` commands, you ask questions
 
-`gindoo` is read-only by design. It is safe to run against any Odoo
-instance without risk of accidental data mutation.
+`gindoo` is a dev tool built for local Odoo development instances.
+It is read-only by design - no risk of accidental data mutation.
+Do not use production credentials with gindoo.
 
 ## Install
 
