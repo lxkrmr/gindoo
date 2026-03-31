@@ -25,7 +25,7 @@ Flags:
 Examples:
   gindoo --url http://localhost:8069 --db mydb --user admin --password secret search_read res.partner "[]" "['name', 'email']"
   gindoo --url http://localhost:8069 --db mydb --user admin --password secret search_read res.partner "[('is_company', '=', True)]" "['name', 'email']" --limit 5
-  gindoo --url http://localhost:8069 --db mydb --user admin --password secret search_read res.partner "[|, ('name', 'ilike', 'foo'), ('id', 'in', [1,2,3])]" "['name', 'email']"`
+  gindoo --url http://localhost:8069 --db mydb --user admin --password secret search_read res.partner "['|', ('name', 'ilike', 'foo'), ('id', 'in', [1,2,3])]" "['name', 'email']"`
 
 // searchReadInput holds the parsed data for a search_read command.
 type searchReadInput struct {
