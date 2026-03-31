@@ -14,9 +14,8 @@ Usage:
   gindoo --url <url> --db <db> --user <user> --password <password> <command> [args]
 
 Commands:
-  search        Search and read records for a model
+  search_read   Search and read records for a model
   search_count  Count records matching a domain
-  read          Read fields from a single record by ID
   fields_get    Describe fields and their metadata for a model
 
 Connection flags (required, must come before the command):
@@ -26,13 +25,11 @@ Connection flags (required, must come before the command):
   --password  Login password
 
 Examples:
-  gindoo --url http://localhost:8069 --db mydb --user admin --password secret search res.partner name email
-  gindoo --url http://localhost:8069 --db mydb --user admin --password secret read res.partner 1 name email
+  gindoo --url http://localhost:8069 --db mydb --user admin --password secret search_read res.partner "[]" "['name', 'email']"
+  gindoo --url http://localhost:8069 --db mydb --user admin --password secret search_read res.partner "[('is_company', '=', True)]" "['name', 'email']" --limit 5
+  gindoo --url http://localhost:8069 --db mydb --user admin --password secret search_count res.partner "[('is_company', '=', True)]"
   gindoo --url http://localhost:8069 --db mydb --user admin --password secret fields_get res.partner
-
-Tip: use a shell alias to avoid repeating connection flags:
-  alias gindoo='gindoo --url http://localhost:8069 --db mydb --user admin --password secret'
-  gindoo search res.partner name email
+  gindoo --url http://localhost:8069 --db mydb --user admin --password secret fields_get res.partner "['name', 'email']"
 
 Run 'gindoo <command> --help' for command-specific usage.`
 
@@ -58,12 +55,10 @@ func main() {
 	}
 
 	switch remaining[0] {
-	case "search":
-		cmd.RunSearch(remaining[1:], conn)
+	case "search_read":
+		cmd.RunSearchRead(remaining[1:], conn)
 	case "search_count":
 		cmd.RunSearchCount(remaining[1:], conn)
-	case "read":
-		cmd.RunRead(remaining[1:], conn)
 	case "fields_get":
 		cmd.RunFieldsGet(remaining[1:], conn)
 	case "help":

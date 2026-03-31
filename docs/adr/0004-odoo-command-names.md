@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted
+Superseded by [ADR 0007](0007-positional-args-and-command-redesign.md)
 
 ## Context
 

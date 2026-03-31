@@ -11,3 +11,4 @@ This directory stores long-lived product and architecture decisions for
 - [0004: Command names follow Odoo conventions](0004-odoo-command-names.md)
 - [0005: Help-driven discovery](0005-help-driven-discovery.md)
 - [0006: internal/cmd instead of cmd](0006-internal-cmd-package.md)
+- [0007: Positional arguments and command redesign](0007-positional-args-and-command-redesign.md)

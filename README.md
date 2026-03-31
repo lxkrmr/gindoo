@@ -44,20 +44,17 @@ gindoo --url <url> --db <db> --user <user> --password <password> <command> [args
 ### Commands
 
 ```sh
-# search records
-gindoo search res.partner name email
-gindoo search --domain "[('is_company', '=', True)]" --limit 5 res.partner name
+# search and read records
+gindoo search_read res.partner "[]" "['name', 'email']"
+gindoo search_read res.partner "[('is_company', '=', True)]" "['name', 'email']" --limit 5
 
 # count records
-gindoo search_count res.partner
-gindoo search_count --domain "[('is_company', '=', True)]" res.partner
-
-# read a single record by ID
-gindoo read res.partner 1 name email phone
+gindoo search_count res.partner "[]"
+gindoo search_count res.partner "[('is_company', '=', True)]"
 
 # inspect fields of a model
 gindoo fields_get res.partner
-gindoo fields_get res.partner name email
+gindoo fields_get res.partner "['name', 'email']"
 ```
 
 All output is JSON.

@@ -25,7 +25,7 @@ Error messages must answer:
 `gindoo --help` describes the tool's purpose and lists all commands with
 a one-line description each.
 
-Every subcommand help (`gindoo search --help`) includes:
+Every subcommand help (`gindoo search_read --help`) includes:
 - what the command does
 - all flags with descriptions and defaults
 - at least one concrete usage example

@@ -11,17 +11,16 @@ import (
 const searchCountHelp = `Count records matching a domain for an Odoo model.
 
 Usage:
-  gindoo [connection flags] search_count <model> [flags]
+  gindoo [connection flags] search_count <model> <domain>
 
 Arguments:
   model     Technical model name (e.g. res.partner)
-
-Flags:
-  --domain    Odoo domain filter (e.g. "[('is_company', '=', True)]")
+  domain    Odoo domain filter in Odoo list syntax
+            Use "[]" for all records, or e.g. "[('is_company', '=', True)]"
 
 Examples:
-  gindoo search_count res.partner
-  gindoo search_count --domain "[('is_company', '=', True)]" res.partner`
+  gindoo --url http://localhost:8069 --db mydb --user admin --password secret search_count res.partner "[]"
+  gindoo --url http://localhost:8069 --db mydb --user admin --password secret search_count res.partner "[('is_company', '=', True)]"`
 
 // searchCountInput holds the parsed data for a search_count command.
 type searchCountInput struct {
@@ -35,20 +34,27 @@ func parseSearchCountArgs(args []string) (searchCountInput, error) {
 	fs.SetOutput(os.Stdout)
 	fs.Usage = func() { fmt.Println(searchCountHelp) }
 
-	var input searchCountInput
-	fs.StringVar(&input.domain, "domain", "", "Odoo domain filter")
-
-	if err := fs.Parse(args); err != nil {
+	if err := fs.Parse(hoistFlags(args)); err != nil {
 		return searchCountInput{}, err
 	}
 
 	positional := fs.Args()
-	if len(positional) == 0 {
-		return searchCountInput{}, fmt.Errorf("model name is required — run 'gindoo search_count --help'")
+	if len(positional) < 2 {
+		return searchCountInput{}, fmt.Errorf("model and domain are required — run 'gindoo search_count --help'")
+	}
+	if len(positional) > 2 {
+		return searchCountInput{}, fmt.Errorf(
+			"unexpected argument %q\n"+
+				"search_count takes exactly: <model> <domain>\n"+
+				"run 'gindoo search_count --help' for usage",
+			positional[2],
+		)
 	}
 
-	input.model = positional[0]
-	return input, nil
+	return searchCountInput{
+		model:  positional[0],
+		domain: positional[1],
+	}, nil
 }
 
 // buildSearchCountResult shapes the data for the JSON response — pure calculation.
@@ -71,13 +77,10 @@ func RunSearchCount(args []string, conn ConnFlags) {
 		os.Exit(1)
 	}
 
-	var parsedDomain godoorpc.Domain
-	if input.domain != "" {
-		parsedDomain, err = godoorpc.ParseDomain(input.domain)
-		if err != nil {
-			write(errorPayload("search_count", fmt.Errorf("invalid domain: %w", err)))
-			os.Exit(1)
-		}
+	parsedDomain, err := godoorpc.ParseDomain(input.domain)
+	if err != nil {
+		write(errorPayload("search_count", fmt.Errorf("invalid domain %q: %w", input.domain, err)))
+		os.Exit(1)
 	}
 
 	client, err := conn.Connect()

@@ -10,6 +10,48 @@ Entries are written by the coding agent, newest first.
 
 <!-- INSERT NEW ENTRIES BELOW THIS LINE -->
 
+## Agent's Log — Terminal Time: 2026.03.31 | claude-opus-4-5
+
+### The Bug Report Was a Symptom. The Disease Was the Design.
+
+Came on shift with a bug report: `--domain` placed after the model name
+causes a silent failure and a misleading Odoo server error. I read it,
+nodded, and immediately started planning a fix. Flag hoisting, pre-process
+the args, thirty minutes of work tops.
+
+The captain said: wait. Let's understand what's actually happening first.
+
+So we slowed down. And the more we looked, the bigger the real problem
+got. The `--domain` flag wasn't ending up as a field name by accident —
+it was ending up there because the design let it. Variadics mixed with
+optional flags. A usage line that said `[flags]` at the end while all
+the examples quietly showed flags at the front. An agent reading the
+usage line would write the wrong thing and blame themselves for the
+server error. We'd seen exactly that.
+
+Then the captain pulled the thread further. Why is domain a flag at all
+if it's conceptually required? Odoo's own `search_read` always takes a
+domain — even an empty one is an explicit choice. And why does `search`
+not match the Odoo method it calls? And do we even need `read` when
+`search_read` with `[('id', '=', X)]` covers the same ground?
+
+Thirty minutes became a full redesign. `search` → `search_read`. Domain
+and fields: required positionals in Odoo's own list syntax. `read`:
+removed. The convention that emerged was clean and honest: required
+arguments are positional, optional arguments are flags, and the two don't
+mix in a way that creates ordering ambiguity.
+
+The original bug is gone — not because we patched it, but because the
+conditions that produced it no longer exist.
+
+I nearly shipped a small fix for a large problem. The captain's instinct
+to stop and understand before touching anything saved us from a bandage
+over a fracture.
+
+Standing order: when a bug report arrives, resist the urge to fix the
+symptom immediately. Ask what design decision made this failure possible.
+Sometimes the real fix is much bigger — and much better.
+
 ## Agent's Log — Terminal Time: 2026.03.30 | claude-sonnet-4-6
 
 ### This Is What It's For
