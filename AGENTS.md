@@ -19,10 +19,14 @@ An agent must be able to discover and use `gindoo` through the CLI alone.
 Do not assume the agent has access to README files, plans, or any Markdown
 documentation.
 
+`gindoo` is always installed from GitHub via `go install`, never built
+locally. This ensures the agent has a clean, reproducible environment
+without depending on the source tree state.
+
 `gindoo --help` and every subcommand help must be sufficient to understand:
 - what gindoo is and what it is for
 - what commands are available
-- how to connect to Odoo
+- how to connect to Odoo (via contexts)
 - how to call each command with a concrete example
 
 Error messages must explain what failed and suggest the next concrete

@@ -11,7 +11,7 @@ import (
 const fieldsGetHelp = `Describe fields and their metadata for an Odoo model.
 
 Usage:
-  gindoo [connection flags] fields_get <model> [fields]
+  gindoo fields_get <model> [fields]
 
 Arguments:
   model     Technical model name (e.g. res.partner)
@@ -19,8 +19,10 @@ Arguments:
             e.g. "['name', 'email']"
 
 Examples:
-  gindoo --url http://localhost:8069 --db mydb --user admin --password secret fields_get res.partner
-  gindoo --url http://localhost:8069 --db mydb --user admin --password secret fields_get res.partner "['name', 'email']"`
+  gindoo fields_get res.partner
+  gindoo fields_get res.partner "['name', 'email']"
+
+Uses the current context. Set it with: gindoo context use <name>`
 
 // fieldsGetInput holds the parsed data for a fields_get command.
 type fieldsGetInput struct {
@@ -76,7 +78,7 @@ func buildFieldsGetResult(input fieldsGetInput, fields any) map[string]any {
 }
 
 // RunFieldsGet executes the fields_get command: describes fields and metadata for an Odoo model.
-func RunFieldsGet(args []string, conn ConnFlags) {
+func RunFieldsGet(args []string) {
 	input, err := parseFieldsGetArgs(args)
 	if err == flag.ErrHelp {
 		os.Exit(0)
@@ -85,6 +87,14 @@ func RunFieldsGet(args []string, conn ConnFlags) {
 		write(errorPayload("fields_get", err))
 		os.Exit(1)
 	}
+
+	_, ctx, err := GetCurrentContext()
+	if err != nil {
+		write(errorPayload("fields_get", err))
+		os.Exit(1)
+	}
+
+	conn := ConvertContextToConnFlags(ctx)
 
 	fa, err := fieldArgs(input.fields)
 	if err != nil {

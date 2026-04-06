@@ -9,7 +9,7 @@ coding assistant. The typical workflow:
 
 1. You tell your coding assistant: _"have a look at gindoo"_
 2. The assistant reads `gindoo --help` and understands the tool
-3. You provide the connection details: URL, database, user, password
+3. You create a connection context (one time)
 4. You and the assistant explore Odoo together — the assistant runs
    `gindoo` commands, you ask questions
 
@@ -33,16 +33,42 @@ the module proxy cache with:
 GOPROXY=direct go install github.com/lxkrmr/gindoo@latest
 ```
 
-## Usage
+## Setup
 
-Connection flags are required for every command and must come before
-the command name:
+Before using `gindoo`, create a connection context:
 
 ```sh
-gindoo --url <url> --db <db> --user <user> --password <password> <command> [args]
+gindoo context create mydev
 ```
 
-### Commands
+This will prompt for:
+- URL (e.g. http://localhost:8069)
+- Database name
+- Login user
+- Password
+
+The context is saved to `~/.config/gindoo/contexts.json` and can be
+reused. If you have multiple Odoo instances:
+
+```sh
+gindoo context create mydev
+gindoo context create staging
+gindoo context list
+gindoo context use staging   # switch between contexts
+```
+
+## Usage
+
+### Manage contexts
+
+```sh
+gindoo context create <name>   # Create a new connection context
+gindoo context list            # Show all contexts (current marked with *)
+gindoo context use <name>      # Set as current context
+gindoo context remove <name>   # Delete a context
+```
+
+### Query Odoo
 
 ```sh
 # search and read records

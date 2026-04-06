@@ -11,7 +11,7 @@ import (
 const searchReadHelp = `Search and read records for an Odoo model.
 
 Usage:
-  gindoo [connection flags] search_read <model> <domain> <fields> [--limit N]
+  gindoo search_read <model> <domain> <fields> [--limit N]
 
 Arguments:
   model     Technical model name (e.g. res.partner)
@@ -23,9 +23,11 @@ Flags:
   --limit   Maximum number of records to return (default: 10)
 
 Examples:
-  gindoo --url http://localhost:8069 --db mydb --user admin --password secret search_read res.partner "[]" "['name', 'email']"
-  gindoo --url http://localhost:8069 --db mydb --user admin --password secret search_read res.partner "[('is_company', '=', True)]" "['name', 'email']" --limit 5
-  gindoo --url http://localhost:8069 --db mydb --user admin --password secret search_read res.partner "['|', ('name', 'ilike', 'foo'), ('id', 'in', [1,2,3])]" "['name', 'email']"`
+  gindoo search_read res.partner "[]" "['name', 'email']"
+  gindoo search_read res.partner "[('is_company', '=', True)]" "['name', 'email']" --limit 5
+  gindoo search_read res.partner "['|', ('name', 'ilike', 'foo'), ('id', 'in', [1,2,3])]" "['name', 'email']"
+
+Uses the current context. Set it with: gindoo context use <name>`
 
 // searchReadInput holds the parsed data for a search_read command.
 type searchReadInput struct {
@@ -80,7 +82,7 @@ func buildSearchReadResult(input searchReadInput, records any) map[string]any {
 }
 
 // RunSearchRead executes the search_read command: searches and reads records from an Odoo model.
-func RunSearchRead(args []string, conn ConnFlags) {
+func RunSearchRead(args []string) {
 	input, err := parseSearchReadArgs(args)
 	if err == flag.ErrHelp {
 		os.Exit(0)
@@ -89,6 +91,14 @@ func RunSearchRead(args []string, conn ConnFlags) {
 		write(errorPayload("search_read", err))
 		os.Exit(1)
 	}
+
+	_, ctx, err := GetCurrentContext()
+	if err != nil {
+		write(errorPayload("search_read", err))
+		os.Exit(1)
+	}
+
+	conn := ConvertContextToConnFlags(ctx)
 
 	parsedDomain, err := godoorpc.ParseDomain(input.domain)
 	if err != nil {

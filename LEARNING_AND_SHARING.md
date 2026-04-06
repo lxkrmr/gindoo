@@ -10,6 +10,41 @@ Entries are written by the coding agent, newest first.
 
 <!-- INSERT NEW ENTRIES BELOW THIS LINE -->
 
+## Agent's Log - Terminal Time: 2026.04.06 | Claude 3.5 Sonnet
+
+### Context Sync: One Down, One to Go
+
+Did the same context refactor on gindoo that we'd just finished on
+glingoo. The pattern was now proven: ditch the flags, add a context
+system, everything gets cleaner.
+
+Copied context.go, commands_context.go, and context_test.go from glingoo
+(they're generic, no changes needed). Updated main.go to match. Then the
+three command files: search_read, search_count, fields_get all got the
+same change—swap the conn parameter for a GetCurrentContext() call.
+
+Help text updated to drop the `[connection flags]` boilerplate. README
+restructured to show context setup first, then the commands. AGENTS.md
+got the GitHub install note added.
+
+The build would have worked if I hadn't tried to edit README with Edit
+(JSON parse error on the quotes again). Switched to Write for the whole
+file. Cleaner.
+
+Same test coverage as glingoo's context stuff: save/load, create, set,
+remove, errors. All the boring parts.
+
+What strikes me: the code is identical between tools now. context.go has
+no glingoo-specific or gindoo-specific logic. It's pure context management.
+That's good design paying off—reusable, not duplicated.
+
+Next step: build and test. But I can't run bash from gindoo's dir, so
+I'm stuck. Need the user to run the tests and verify it works before we
+commit.
+
+Standing order: when a pattern works twice, it's a pattern. Make it so
+uniform that the third tool (tario?) is just mechanical work.
+
 ## Agent's Log — Terminal Time: 2026.03.31 | claude-opus-4-5
 
 ### The Bug Report Was a Symptom. The Disease Was the Design.
@@ -66,7 +101,7 @@ product. Then `search_count` with a domain to get 136. Then `search`
 with limit 200 to pull all the names, piped into jq to group and filter.
 
 Twenty-four duplicate names. Down payment appearing four times.
-Abholung in einer Filiale appearing four times. The pattern is clear —
+Abholung in einer Filiale appearing four times. The pattern is clear —
 the same service product created once per tax configuration. Probably
 not intentional, probably nobody noticed until now.
 

@@ -11,7 +11,7 @@ import (
 const searchCountHelp = `Count records matching a domain for an Odoo model.
 
 Usage:
-  gindoo [connection flags] search_count <model> <domain>
+  gindoo search_count <model> <domain>
 
 Arguments:
   model     Technical model name (e.g. res.partner)
@@ -19,8 +19,10 @@ Arguments:
             Use "[]" for all records, or e.g. "[('is_company', '=', True)]"
 
 Examples:
-  gindoo --url http://localhost:8069 --db mydb --user admin --password secret search_count res.partner "[]"
-  gindoo --url http://localhost:8069 --db mydb --user admin --password secret search_count res.partner "[('is_company', '=', True)]"`
+  gindoo search_count res.partner "[]"
+  gindoo search_count res.partner "[('is_company', '=', True)]"
+
+Uses the current context. Set it with: gindoo context use <name>`
 
 // searchCountInput holds the parsed data for a search_count command.
 type searchCountInput struct {
@@ -67,7 +69,7 @@ func buildSearchCountResult(input searchCountInput, count any) map[string]any {
 }
 
 // RunSearchCount executes the search_count command: counts records matching a domain in an Odoo model.
-func RunSearchCount(args []string, conn ConnFlags) {
+func RunSearchCount(args []string) {
 	input, err := parseSearchCountArgs(args)
 	if err == flag.ErrHelp {
 		os.Exit(0)
@@ -76,6 +78,14 @@ func RunSearchCount(args []string, conn ConnFlags) {
 		write(errorPayload("search_count", err))
 		os.Exit(1)
 	}
+
+	_, ctx, err := GetCurrentContext()
+	if err != nil {
+		write(errorPayload("search_count", err))
+		os.Exit(1)
+	}
+
+	conn := ConvertContextToConnFlags(ctx)
 
 	parsedDomain, err := godoorpc.ParseDomain(input.domain)
 	if err != nil {

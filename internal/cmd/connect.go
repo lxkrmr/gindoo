@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"errors"
-	"flag"
 
 	"github.com/lxkrmr/godoorpc"
 )
@@ -13,14 +12,6 @@ type ConnFlags struct {
 	DB       string
 	User     string
 	Password string
-}
-
-// RegisterConnFlags registers the connection flags on a FlagSet.
-func RegisterConnFlags(fs *flag.FlagSet, c *ConnFlags) {
-	fs.StringVar(&c.URL, "url", "", "Odoo base URL (e.g. http://localhost:8069)")
-	fs.StringVar(&c.DB, "db", "", "Database name")
-	fs.StringVar(&c.User, "user", "", "Login user")
-	fs.StringVar(&c.Password, "password", "", "Login password")
 }
 
 // validate checks that all connection fields are present — pure calculation.
