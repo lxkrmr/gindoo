@@ -79,6 +79,10 @@ gindoo search_read res.partner "[('is_company', '=', True)]" "['name', 'email']"
 gindoo search_count res.partner "[]"
 gindoo search_count res.partner "[('is_company', '=', True)]"
 
+# group and aggregate records
+gindoo read_group product.template "[]" "['fine_weight:avg']" "['default_code']"
+gindoo read_group res.partner "[('is_company', '=', True)]" "['id:count']" "['country_id']" --limit 5
+
 # inspect fields of a model
 gindoo fields_get res.partner
 gindoo fields_get res.partner "['name', 'email']"

@@ -13,3 +13,4 @@ This directory stores long-lived product and architecture decisions for
 - [0006: internal/cmd instead of cmd](0006-internal-cmd-package.md)
 - [0007: Positional arguments and command redesign](0007-positional-args-and-command-redesign.md)
 - [0008: Contexts for connection management](0008-contexts-for-connection-management.md)
+- [0009: read_group for database-level aggregations](0009-read-group-for-aggregations.md)
