@@ -17,6 +17,7 @@ Commands:
   search_read   Search and read records for a model
   search_count  Count records matching a domain
   fields_get    Describe fields and their metadata for a model
+  read_group    Group records by fields and return aggregates
 
 Examples:
   gindoo context create mydev
@@ -27,6 +28,7 @@ Examples:
   gindoo search_count res.partner "[('is_company', '=', True)]"
   gindoo fields_get res.partner
   gindoo fields_get res.partner "['name', 'email']"
+  gindoo read_group product.template "[]" "['fine_weight:avg']" "['default_code']"
 
 Run 'gindoo <command> --help' for command-specific usage.`
 
@@ -48,6 +50,8 @@ func main() {
 		cmd.RunSearchCount(args)
 	case "fields_get":
 		cmd.RunFieldsGet(args)
+	case "read_group":
+		cmd.RunReadGroup(args)
 	case "help":
 		fmt.Println(help)
 	default:
