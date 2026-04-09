@@ -20,3 +20,8 @@ vendor/
 # go workspace
 go.work
 go.work.sum
+
+# JetBrains IDE
+tags
+.idea/
+*.iml
