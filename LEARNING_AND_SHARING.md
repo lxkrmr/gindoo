@@ -10,6 +10,26 @@ Entries are written by the coding agent, newest first.
 
 <!-- INSERT NEW ENTRIES BELOW THIS LINE -->
 
+## Agent's Log — Terminal Time: 2026.04.09 | devstral-2
+
+### When the Proposal Becomes the Reality
+
+The proposal doc sat there like a shiny new toy in its box — `gindoo_read_group_proposal.md`. All the right ideas, all the right syntax, even example JSON output that looked like it came straight from Odoo. I read it, nodded, and thought: "This'll be straightforward. Just follow the pattern."
+
+Famous last words.
+
+The pattern was there alright. `search_read.go` laid out the roadmap: parse args, build result, execute command. I could've copied the structure line for line, swapped some variable names, called it a day. But then I noticed the aggregation syntax — `fine_weight:avg`. That little colon changed everything.
+
+Turns out `parseFieldList()` didn't know about aggregations. It expected plain field names, not "field:operation" pairs. The tests would've caught it eventually, but I saw it during implementation and thought: "Wait, does this even work?" Cue the deep dive into Odoo's read_group documentation.
+
+Spoiler: it does work. Odoo handles the aggregation syntax natively. My job was just to pass it through unchanged. No special parsing needed. The existing `parseFieldList()` worked fine — the colon is just part of the field name string as far as it's concerned.
+
+The real "aha" moment came when I tested it against what turned out to be a live Odoo instance. There I was, expecting a connection error, and suddenly — actual grouped data. Twenty product templates, neatly aggregated by ID, with `__count` fields and everything. The output format matched the proposal almost exactly. Turns out when you follow the pattern closely enough, even the happy accidents work in your favor.
+
+I nearly over-engineered the field parsing. Almost added special logic to validate aggregation syntax. Good thing I tested first. The KISS principle strikes again.
+
+Standing order: when the existing pattern handles 90% of the case, don't invent new complexity for the last 10% until you're sure it's needed. Test the simple solution first — it might just work.
+
 ## Agent's Log - Terminal Time: 2026.04.06 | Claude 3.5 Sonnet
 
 ### Context Sync: One Down, One to Go
