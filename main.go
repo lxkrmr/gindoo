@@ -33,7 +33,7 @@ Examples:
 Run 'gindoo <command> --help' for command-specific usage.`
 
 func main() {
-	if len(os.Args) < 2 {
+	if len(os.Args) < 2 || os.Args[1] == "--help" || os.Args[1] == "-h" {
 		fmt.Println(help)
 		os.Exit(0)
 	}
